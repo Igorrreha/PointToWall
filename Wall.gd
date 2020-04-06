@@ -12,5 +12,7 @@ func _ready():
 
 
 func _process(delta):
-	if not pointNode.isCatched:
-		pathFollowNode.offset += pointNode.moveSpeed * delta
+	# движение поинтов выключено
+	#if not pointNode.isCatched:
+		#pathFollowNode.offset += pointNode.moveSpeed * delta
+	pass
