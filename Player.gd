@@ -33,3 +33,6 @@ func _on_Player_area_entered(area):
 	elif area.is_in_group("point"):
 		if not area.isCatched:
 			area.set_catched(true)
+	elif area.is_in_group("enemy"):
+		Global.points = 0
+		get_tree().reload_current_scene()
