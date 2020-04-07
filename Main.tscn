@@ -31,10 +31,14 @@ rotation = 3.14159
 
 [node name="Player" parent="GameField" instance=ExtResource( 2 )]
 
-[node name="RotationTween" type="Tween" parent="GameField"]
+[node name="Tween" type="Tween" parent="GameField"]
 
-[node name="RotationTimer" type="Timer" parent="GameField"]
-one_shot = true
+[node name="Timer" type="Timer" parent="GameField/Tween"]
+autostart = true
+
+[node name="TurnOverTween" type="Tween" parent="GameField"]
+
+[node name="PosTween" type="Tween" parent="GameField"]
 
 [node name="UI" type="MarginContainer" parent="."]
 anchor_right = 1.0
@@ -52,6 +56,12 @@ text = "Points"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="timeout" from="GameField/RotationTimer" to="GameField" method="start_rotation"]
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [editable path="GameField/Walls/Wall"]

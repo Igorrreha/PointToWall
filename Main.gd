@@ -2,12 +2,12 @@ extends Control
 
 var playerNode
 var pointCounterNode
-
-var points = 0
+var gameFieldNode
 
 func _ready():
+	gameFieldNode = $GameField
 	pointCounterNode = $UI/PointsCounter
-	pointCounterNode.text = "Points: " + str(points)
+	pointCounterNode.text = "Points: " + str(Global.points)
 	
 	playerNode = $GameField/Player
 	
@@ -41,14 +41,20 @@ func _process(delta):
 
 # соприкосновение с точкой 
 func point_catched():
+	# переворот игрока
 	playerNode.revert_move_dir()
 	
+	# активация точек (пойманная деактивируется в другом скрипте)
 	var wallsArr = $GameField/Walls.get_children()
 	for wall in wallsArr:
 		wall.pointNode.set_catched(false)
 	
-	points += 1
-	pointCounterNode.text = "Points: " + str(points)
+	# запись и вывод количества очков на экран
+	Global.points += 1
+	pointCounterNode.text = "Points: " + str(Global.points)
+	
+	# передача потока в скрипт игрового поля
+	gameFieldNode.point_catched()
 
 
 func _input(event):
