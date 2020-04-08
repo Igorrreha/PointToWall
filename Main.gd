@@ -2,17 +2,14 @@ extends Control
 
 var FlyingObstacleTscn = preload("res://enemies/FlyingObstacle.tscn")
 
-var playerNode
-var pointCounterNode
-var gameFieldNode
-var enemiesContainerNode
+onready var playerNode = $GameField/Player
+onready var pointCounterNode = $UI/VBoxContainer/PointsCounter
+onready var consoleNode = $UI/VBoxContainer/Console
+onready var gameFieldNode = $GameField
+onready var enemiesContainerNode = $GameField/Enemies
+
 
 func _ready():
-	gameFieldNode = $GameField
-	pointCounterNode = $UI/PointsCounter
-	enemiesContainerNode = $GameField/Enemies
-	playerNode = $GameField/Player
-	
 	pointCounterNode.text = "Points: " + str(Global.points)
 	
 	# заполнить массив целевых точек
@@ -41,6 +38,8 @@ func _process(delta):
 		# приближение целевой точки к стене при выключенном поинте
 		if wall.pointNode.isCatched:
 			playerNode.moveTargets[i].x -= wall.pointNode.get_parent().position.rotated(wall.rotation).x
+	
+	consoleNode.text = str(Global.displaySize)
 
 
 # соприкосновение с точкой 
