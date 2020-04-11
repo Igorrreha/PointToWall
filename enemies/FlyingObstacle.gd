@@ -1,15 +1,15 @@
 extends Node2D
 
-var MoveCurveLinear = preload("res://enemies/path_curves/linear.tres")
+export var MoveCurveLinear = preload("res://enemies/path_curves/linear.tres")
 var MoveCurveZigzag = preload("res://enemies/path_curves/zigzag.tres")
 
-var moveTweenNode
-var scaleTweenNode
-var scaleOutTimerNode
-var destroyTimerNode
-var pathNode
-var pathFollowNode
-var bodyNode
+onready var moveTweenNode = $MoveTween
+onready var scaleTweenNode = $ScaleTween
+onready var scaleOutTimerNode = $ScaleOutTimer
+onready var destroyTimerNode = $DestroyTimer
+onready var pathNode = $Path2D
+onready var pathFollowNode = $Path2D/PathFollow2D
+onready var bodyNode = $Path2D/PathFollow2D/Body
 
 var isMoveBackwards = true if randi() % 2 == 1 else false
 
@@ -21,15 +21,7 @@ var inOutTweenDuration = 0.5
 
 func _ready():
 	
-	bodyNode = $Path2D/PathFollow2D/Body
-	moveTweenNode = $MoveTween
-	scaleTweenNode = $ScaleTween
-	pathNode = $Path2D
-	pathFollowNode = $Path2D/PathFollow2D
-	scaleOutTimerNode = $ScaleOutTimer
-	destroyTimerNode = $DestroyTimer
-	
-	pathNode.curve = MoveCurveLinear if randi() % 3 == 1 else MoveCurveZigzag
+	pathNode.curve = MoveCurveLinear
 	
 	moveTweenNode.interpolate_property(pathFollowNode, "unit_offset", int(isMoveBackwards), int(not isMoveBackwards), moveDuration, Tween.TRANS_LINEAR)
 	moveTweenNode.start()

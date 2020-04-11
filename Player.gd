@@ -1,8 +1,9 @@
 extends Area2D
 
+export var radius = 12
+
 # список точек, к которым может двигаться игрок
 var moveTargets = [Vector2(0,0), Vector2(100,100)]
-
 # номер точки, к которой движется игрок
 var moveTargetTo = 0
 # номер точки, от которой движется игрок

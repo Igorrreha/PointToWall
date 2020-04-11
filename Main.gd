@@ -7,6 +7,9 @@ onready var pointCounterNode = $UI/VBoxContainer/PointsCounter
 onready var consoleNode = $UI/VBoxContainer/Console
 onready var gameFieldNode = $GameField
 onready var enemiesContainerNode = $GameField/Enemies
+onready var wallsContainer = $GameField/Walls
+
+export var wallToCenterDistance = Vector2(-180, 0)
 
 
 func _ready():
@@ -15,7 +18,7 @@ func _ready():
 	# заполнить массив целевых точек
 	playerNode.moveTargets = []
 	
-	var wallsArr = $GameField/Walls.get_children()
+	var wallsArr = wallsContainer.get_children()
 	for i in range(wallsArr.size()):
 		var wall = wallsArr[i]
 		playerNode.moveTargets.push_back(wall.position + wall.pointNode.get_parent().position.rotated(wall.rotation))
@@ -25,12 +28,14 @@ func _ready():
 			playerNode.moveTargetTo = i
 		
 		wall.pointNode.connect("point_catched", self, "point_catched")
+		
+		wall.position = wallToCenterDistance.rotated(wall.rotation)
 
 
 func _process(delta):
 	
 	# обновить значения массива целевых точек
-	var wallsArr = $GameField/Walls.get_children()
+	var wallsArr = wallsContainer.get_children()
 	for i in range(wallsArr.size()):
 		var wall = wallsArr[i]
 		playerNode.moveTargets[i] = wall.position + wall.pointNode.get_parent().position.rotated(wall.rotation)
@@ -44,11 +49,9 @@ func _process(delta):
 
 # соприкосновение с точкой 
 func point_catched():
-	# переворот игрока
-	playerNode.revert_move_dir()
 	
 	# активация точек (пойманная точка деактивируется в другом скрипте)
-	var wallsArr = $GameField/Walls.get_children()
+	var wallsArr = wallsContainer.get_children()
 	for wall in wallsArr:
 		wall.pointNode.set_catched(false)
 	
@@ -71,4 +74,11 @@ func spawn_enemies():
 
 func _input(event):
 	if event is InputEventScreenTouch and event.pressed:
+		for wall in wallsContainer.get_children():
+			# блокировка переворота игрока, если тот слишком близко к стене
+			var distanceOffset = 1 # дополнительный оффсет
+			var wallXToCenter = wall.position.rotated(-wall.rotation).x
+			var playerXToCenter = playerNode.position.rotated(-wall.rotation - PI).x
+			if abs(wallXToCenter - playerXToCenter) < wall.width/2 + playerNode.radius + distanceOffset:
+				return
 		playerNode.revert_move_dir()

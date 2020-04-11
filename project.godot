@@ -28,12 +28,26 @@ Global="*res://global.gd"
 window/size/width=540
 window/size/height=960
 window/handheld/orientation="portrait"
-window/stretch/mode="2d"
-window/stretch/aspect="keep_width"
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+
+[input]
+
+ui_left={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777231,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":14,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[locale]
+
+locale_filter=[ 1, [ "en", "ru", "ru_RU", "ru_UA" ] ]
 
 [rendering]
 

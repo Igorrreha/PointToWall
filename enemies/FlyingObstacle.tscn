@@ -3,7 +3,7 @@
 [ext_resource path="res://enemies/FlyingObstacle.gd" type="Script" id=1]
 [ext_resource path="res://enemies/path_curves/linear.tres" type="Curve2D" id=2]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4, 32 )
 
 [node name="FlyingObstacle" type="Node2D"]
@@ -32,7 +32,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/Body"]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="MoveTween" type="Tween" parent="."]
 

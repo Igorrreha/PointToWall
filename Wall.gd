@@ -5,6 +5,8 @@ var pointNode
 var pathFollowNode
 var pathFollowTweenNode
 
+export var width = 16 
+
 
 func _ready():
 	pointNode = $PointPath/PathFollow2D/Point
