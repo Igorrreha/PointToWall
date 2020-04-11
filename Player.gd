@@ -9,7 +9,8 @@ var moveTargetTo = 0
 # номер точки, от которой движется игрок
 var moveTargetFrom = 1
 
-var moveSpeed = 100
+export var moveSpeed = 100
+export var rotSpeed = 180
 
 
 func _process(delta):
@@ -17,6 +18,7 @@ func _process(delta):
 	moveVec = moveVec.normalized() * moveSpeed * delta
 	
 	position += moveVec
+	rotate(deg2rad(rotSpeed * delta))
 
 
 # разворачивает направление движения
@@ -25,6 +27,8 @@ func revert_move_dir():
 	
 	moveTargetTo = moveTargetFrom
 	moveTargetFrom = oldMoveTargetTo
+	
+	rotSpeed = -rotSpeed
 
 
 # обработка столкновений
