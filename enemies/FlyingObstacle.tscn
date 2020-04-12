@@ -3,10 +3,10 @@
 [ext_resource path="res://enemies/FlyingObstacle.gd" type="Script" id=1]
 [ext_resource path="res://enemies/path_curves/linear.tres" type="Curve2D" id=2]
 
-[sub_resource type="OccluderPolygon2D" id=2]
+[sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -32, -4, -32, 4, 32, 4, 32, -4 )
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 4, 32 )
 
 [node name="FlyingObstacle" type="Node2D"]
@@ -27,19 +27,20 @@ scale = Vector2( 1e-05, 1e-05 )
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Path2D/PathFollow2D/Body"]
 rotation = -1.5708
-occluder = SubResource( 2 )
+occluder = SubResource( 1 )
 
 [node name="ColorRect" type="ColorRect" parent="Path2D/PathFollow2D/Body"]
 margin_left = -4.0
 margin_top = -32.0
 margin_right = 4.0
 margin_bottom = 32.0
+color = Color( 0.117647, 0.117647, 0.117647, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/Body"]
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="MoveTween" type="Tween" parent="."]
 

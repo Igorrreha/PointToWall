@@ -26,4 +26,5 @@ scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 2 )
 energy = 1.2
 shadow_enabled = true
+shadow_color = Color( 0, 0, 0, 1 )
 [connection signal="area_entered" from="." to="." method="_on_Player_area_entered"]
