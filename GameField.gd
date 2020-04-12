@@ -27,13 +27,17 @@ enum STATE_PARAM {
 var states = [
 	[0, ROT_MODES.NO_ROT], 
 	[5, ROT_MODES.TWEEN_TO_POINT], 
-	[10, ROT_MODES.TWEEN_TO_POINT], 
-	[15, ROT_MODES.TWEEN_TO_POINT], 
-	[20, ROT_MODES.CONTINUOUS, 0, 1, 10, 10], 
-	[30, ROT_MODES.CONTINUOUS, 0.2, 10, 50, 20], 
-	[50, ROT_MODES.CONTINUOUS, 0.5, 50, 100, 20]]
+	[8, ROT_MODES.TWEEN_TO_POINT], 
+	[11, ROT_MODES.TWEEN_TO_POINT], 
+	[14, ROT_MODES.TWEEN_TO_POINT], 
+	[17, ROT_MODES.TWEEN_TO_POINT], 
+	[20, ROT_MODES.TWEEN_TO_POINT], 
+	[23, ROT_MODES.TWEEN_TO_POINT], 
+	[26, ROT_MODES.CONTINUOUS, 0, 1, 10, 10], 
+	[36, ROT_MODES.CONTINUOUS, 0.2, 10, 50, 20], 
+	[56, ROT_MODES.CONTINUOUS, 0.5, 50, 100, 20]]
 var curState = 0
-var isRotClockwise = true
+var isRotClockwise = true if randi() % 2 == 0 else false
 
 var impulseDuration = 0.2
 var turnOverDuration = 0.6
@@ -75,12 +79,12 @@ func point_catched():
 		var turnOverChance = states[curState][STATE_PARAM.TURN_OVER_CHANCE]
 		if turnOverChance > 0 and (turnOverChance == 1 or randi() % int(1/turnOverChance) == 0):
 			turn_over()
+		
+		# смена угла вращения
+		isRotClockwise = false if randi() % 2 == 1 else true
 	
 	# изменение позиции
 	#change_pos()
-	
-	# смена угла вращения
-	isRotClockwise = false if randi() % 2 == 1 else true
 	
 	# смена стадии
 	if curState < states.size() - 1 and Global.points >= states[curState + 1][STATE_PARAM.MIN_POINTS]:
