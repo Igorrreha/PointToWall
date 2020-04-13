@@ -2,8 +2,7 @@ extends Node
 
 var points = 0
 
-var displaySize
+onready var displaySize = get_viewport().size
 
-
-func _ready():
-	displaySize = get_viewport().size
+var isLightOn = true
+var lightModeChangeDuration = 0.2

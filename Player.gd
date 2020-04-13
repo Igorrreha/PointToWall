@@ -1,6 +1,8 @@
 extends Area2D
 
-export var radius = 12
+onready var lightModeChangeSoundNode = $LightModeChangeSound
+onready var lightNodeTimerNode = $LightModeTimer
+onready var lightNode = $Light2D
 
 # список точек, к которым может двигаться игрок
 var moveTargets = [Vector2(0,0), Vector2(100,100)]
@@ -9,6 +11,7 @@ var moveTargetTo = 0
 # номер точки, от которой движется игрок
 var moveTargetFrom = 1
 
+export var radius = 12
 export var moveSpeed = 100
 export var rotSpeed = 180
 
@@ -41,3 +44,13 @@ func _on_Player_area_entered(area):
 	elif area.is_in_group("enemy"):
 		Global.points = 0
 		get_tree().reload_current_scene()
+
+
+# включение / выключение света 
+# вызывается по сигналу GameField - lightModeChanged
+func set_light_mode(_setImmediately = false):
+	lightNodeTimerNode.start(Global.lightModeChangeDuration)
+	yield(lightNodeTimerNode, "timeout")
+	lightNode.visible = not Global.isLightOn
+	if not _setImmediately:
+		lightModeChangeSoundNode.play()

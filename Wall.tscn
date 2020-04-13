@@ -27,7 +27,7 @@ margin_left = -8.0
 margin_top = -96.0
 margin_right = 8.0
 margin_bottom = 96.0
-color = Color( 0.117647, 0.117647, 0.117647, 1 )
+color = Color( 0.882353, 0.882353, 0.882353, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -44,3 +44,5 @@ rotation = 1.5708
 
 [node name="Point" parent="PointPath/PathFollow2D" instance=ExtResource( 1 )]
 rotation = -1.5708
+
+[node name="LightModeTween" type="Tween" parent="."]

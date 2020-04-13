@@ -15,7 +15,7 @@ export var wallToCenterDistance = Vector2(-180, 0)
 func _ready():
 	pointCounterNode.text = "Points: " + str(Global.points)
 	
-	# заполнить массив целевых точек
+	# заполнение массива целевых точек
 	playerNode.moveTargets = []
 	
 	var wallsArr = wallsContainer.get_children()
@@ -27,9 +27,14 @@ func _ready():
 		else: 
 			playerNode.moveTargetTo = i
 		
-		wall.pointNode.connect("point_catched", self, "point_catched")
-		
+		# позиционирование стен
 		wall.position = wallToCenterDistance.rotated(wall.rotation)
+		
+		# присоединение сигналов
+		wall.pointNode.connect("point_catched", self, "point_catched")
+		gameFieldNode.connect("light_mode_changed", wall, "set_light_mode")
+	
+	gameFieldNode.connect("light_mode_changed", playerNode, "set_light_mode")
 
 
 func _process(delta):
@@ -68,6 +73,11 @@ func spawn_enemies():
 	var enemyNode = FlyingObstacleTscn.instance()
 	enemyNode.position.x += randi() % 160 - 80
 	enemyNode.rotation_degrees = randi() % 60 - 30
+	
+	if enemyNode.is_in_group("light_occluder"):
+		if not Global.isLightOn:
+			enemyNode.modulate.a = 0
+	gameFieldNode.connect("light_mode_changed", enemyNode, "set_light_mode")
 	
 	enemiesContainerNode.add_child(enemyNode)
 

@@ -11,6 +11,7 @@ enum ROT_MODES {
 enum STATE_PARAM {
 	MIN_POINTS,
 	ROT_MODE,
+	IS_NO_LIGHT_MODE,
 	TURN_OVER_CHANCE,
 	MIN_SPEED,
 	MAX_SPEED,
@@ -20,22 +21,23 @@ enum STATE_PARAM {
 # индексы: 
 # 	0 - количество очков для входа в стадию
 # 	1 - метод вращения
-# 	2 - шанс переворота поля
-# 	3 - начальная скорость вращения
-# 	4 - максимальная скорость вращения
-# 	5 - количество поинтов до максимальной скорости вращения (предполагается, что скорость вращения поля нарастает линейно)
+# 	2 - фл режим без света
+# 	3 - шанс переворота поля
+# 	4 - начальная скорость вращения
+# 	5 - максимальная скорость вращения
+# 	6 - количество поинтов до максимальной скорости вращения (предполагается, что скорость вращения поля нарастает линейно)
 var states = [
-	[0, ROT_MODES.NO_ROT], 
-	[5, ROT_MODES.TWEEN_TO_POINT], 
-	[8, ROT_MODES.TWEEN_TO_POINT], 
-	[11, ROT_MODES.TWEEN_TO_POINT], 
-	[14, ROT_MODES.TWEEN_TO_POINT], 
-	[17, ROT_MODES.TWEEN_TO_POINT], 
-	[20, ROT_MODES.TWEEN_TO_POINT], 
-	[23, ROT_MODES.TWEEN_TO_POINT], 
-	[26, ROT_MODES.CONTINUOUS, 0, 1, 10, 10], 
-	[36, ROT_MODES.CONTINUOUS, 0.2, 10, 50, 20], 
-	[56, ROT_MODES.CONTINUOUS, 0.5, 50, 100, 20]]
+	[0, ROT_MODES.NO_ROT, false], 
+	[5, ROT_MODES.TWEEN_TO_POINT, true], 
+	[8, ROT_MODES.TWEEN_TO_POINT, false], 
+	[11, ROT_MODES.TWEEN_TO_POINT, true], 
+	[14, ROT_MODES.TWEEN_TO_POINT, false], 
+	[17, ROT_MODES.TWEEN_TO_POINT, false], 
+	[20, ROT_MODES.TWEEN_TO_POINT, false], 
+	[23, ROT_MODES.TWEEN_TO_POINT, false], 
+	[26, ROT_MODES.CONTINUOUS, false, 0, 1, 10, 10], 
+	[36, ROT_MODES.CONTINUOUS, false, 0.2, 10, 50, 20], 
+	[56, ROT_MODES.CONTINUOUS, false, 0.5, 50, 100, 20]]
 var curState = 0
 var isRotClockwise = true if randi() % 2 == 0 else false
 
@@ -44,10 +46,16 @@ var turnOverDuration = 0.6
 var tweenToPointRotModeDegrees = 45
 var tweenToPointRotModeDuration = 10
 
+signal light_mode_changed
+
 
 func _ready():
 	# позиционирование в центр дисплея
 	position = Global.displaySize / 2
+	
+	# смена режима освещения
+	Global.isLightOn = not states[curState][STATE_PARAM.IS_NO_LIGHT_MODE]
+	emit_signal("light_mode_changed", true)
 
 
 func _process(delta):
@@ -89,8 +97,15 @@ func point_catched():
 	# смена стадии
 	if curState < states.size() - 1 and Global.points >= states[curState + 1][STATE_PARAM.MIN_POINTS]:
 		curState += 1
+		
+		# начало переворота для стадии TWEEN_TO_POINT
 		if states[curState][STATE_PARAM.ROT_MODE] == ROT_MODES.TWEEN_TO_POINT:
 			turn_over(tweenToPointRotModeDegrees, tweenToPointRotModeDuration)
+		
+		# смена режима освещения
+		if states[curState][STATE_PARAM.IS_NO_LIGHT_MODE] == Global.isLightOn:
+			Global.isLightOn = not Global.isLightOn
+			emit_signal("light_mode_changed")
 
 
 # переворот поля

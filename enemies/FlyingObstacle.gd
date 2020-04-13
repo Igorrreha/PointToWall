@@ -5,6 +5,7 @@ var MoveCurveZigzag = preload("res://enemies/path_curves/zigzag.tres")
 
 onready var moveTweenNode = $MoveTween
 onready var scaleTweenNode = $ScaleTween
+onready var lightModeTweenNode = $LightModeTween
 onready var scaleOutTimerNode = $ScaleOutTimer
 onready var destroyTimerNode = $DestroyTimer
 onready var pathNode = $Path2D
@@ -42,6 +43,18 @@ func _process(delta):
 func start_scale_out():
 	scaleTweenNode.interpolate_property(bodyNode, "scale", bodyNode.scale, Vector2(0,0), inOutTweenDuration, Tween.TRANS_LINEAR)
 	scaleTweenNode.start()
+
+
+# смена режима освещённости
+# вызывается по сигналу GameField - lightModeChanged
+func set_light_mode(_setImmediately = false):
+	var newAlpha = 1 if Global.isLightOn else 0
+	if _setImmediately:
+		modulate.a = newAlpha
+	else:
+		var newModulate = Color(modulate.r, modulate.g, modulate.b, newAlpha)
+		lightModeTweenNode.interpolate_property(self, "modulate", modulate, newModulate, Global.lightModeChangeDuration)
+		lightModeTweenNode.start()
 
 
 # уничтожиться
